@@ -31,8 +31,8 @@ return new class extends Migration {
             $table->softDeletes();
 
             $table->index('email');
-            $table->index('email');
-            $table->index('email');
+            $table->index('username');
+            $table->index('is_active');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
