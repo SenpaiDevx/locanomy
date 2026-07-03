@@ -1,0 +1,29 @@
+{
+  "graphNodePositions": {
+    "__arcforge_entry__": {
+      "x": -72.32789655172414,
+      "y": 10.403327586206892
+    },
+    "route_GET__user_routes_api.php": {
+      "x": 320,
+      "y": -150
+    },
+    "route@routes/api.php:6": {
+      "x": 320,
+      "y": -150
+    },
+    "middleware_HandleInertiaRequests_app_Http_Middleware_HandleInertiaRequests.php": {
+      "x": 320,
+      "y": 0
+    },
+    "model_App.Models.PersonalAccessToken_app_Models_PersonalAccessToken.php": {
+      "x": 320,
+      "y": 150
+    }
+  },
+  "graphViewport": {
+    "x": 91.23728813559285,
+    "y": 245.64092022972784,
+    "zoom": 1.0092924511885288
+  }
+}
