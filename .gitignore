@@ -20,6 +20,8 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+github_id
+github_id.pub
 /auth.json
 /.fleet
 /.idea
