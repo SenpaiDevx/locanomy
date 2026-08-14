@@ -3,7 +3,7 @@
 use Spatie\Permission\DefaultTeamResolver;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-
+ 
 return [
 
     'models' => [
@@ -18,7 +18,7 @@ return [
          */
 
         // 'permission' => Permission::class,
-        'permission' => \Modules\AdminAccess\Models\Permission::class,
+        'permission' => \Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Models\Permission::class,
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -30,7 +30,7 @@ return [
          */
 
         // 'role' => Role::class,
-        'role' =>  \Modules\AdminAccess\Models\Role::class,
+        'role' =>  \Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Models\Role::class,
 
         /*
          * When using the "Teams" feature from this package, we need to know which

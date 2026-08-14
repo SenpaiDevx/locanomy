@@ -39,6 +39,11 @@ return [
             'serialize' => false,
         ],
 
+        'installation' => [
+            'driver' => 'file',
+            'path' => storage_path('framework/cache/installation')
+        ],   
+
         'database' => [
             'driver' => 'database',
             'connection' => env('DB_CACHE_CONNECTION'),
