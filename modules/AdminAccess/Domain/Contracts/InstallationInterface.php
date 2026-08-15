@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\AdminAccess\Domain\Contracts;
+
 use Modules\AdminAccess\Domain\ValueObjects\AdminId;
 interface InstallationInterface {
     public function isInstalled() : bool;

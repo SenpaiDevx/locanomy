@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
@@ -53,4 +54,9 @@ final class Admin extends Model implements AuthenticatableContract
         'failed_login_attempts' => 'integer',
 
     ];
+
+    public function passwordHistories() : HasMany
+    {
+        return $this->hasMany(PasswordHistory::class, "admin_id");
+    }
 }
