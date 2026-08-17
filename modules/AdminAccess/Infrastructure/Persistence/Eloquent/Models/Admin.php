@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
@@ -23,7 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
 final class Admin extends Model implements AuthenticatableContract
 {
     /** @use HasFactory<AdminFactory> */
-    use Authenticatable, HasFactory, HasUuids, HasApiTokens, HasRoles, Notifiable;
+    use Authenticatable, HasFactory, HasUuids, HasApiTokens, HasRoles, Notifiable, SoftDeletes;
 
     public $incrementing = false;
     protected $table = 'admin';

@@ -1,11 +1,16 @@
 <?php
 
-use App\Providers\AppServiceProvider;
+use App\Providers\{AppServiceProvider, SharedServiceProvider};
 use Modules\Product\Providers\ProductServiceProvider;
-use Modules\AdminAccess\Providers\AdminAccessServiceProvider;
+use Modules\AdminAccess\Providers\{
+    AdminAccessServiceProvider,
+    AdminAccessEventServiceProvider
+};
 
 return [
     AppServiceProvider::class,
-    ProductServiceProvider::class,
+    SharedServiceProvider::class,
     AdminAccessServiceProvider::class,
+    AdminAccessEventServiceProvider::class,
+    ProductServiceProvider::class,
 ];

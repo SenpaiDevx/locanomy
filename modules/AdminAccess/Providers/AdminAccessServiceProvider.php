@@ -3,40 +3,86 @@
 namespace Modules\AdminAccess\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\{Route, Gate, RateLimiter};
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
-use Modules\AdminAccess\Domain\Contracts\InstallationInterface;
-use Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Repositories\InstallationRepository;
+use Modules\AdminAccess\Domain\Contracts\{
+    InstallationInterface,
+    AdminRepositoryInterface,
+    PasswordHasherInterface,
+    RoleManagerInterface,
+    PasswordPolicyInterface,
+    BreachedPasswordCheckerInterface
+};
+use Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Repositories\{
+    InstallationRepository,
+    AdminRepository
+};
+use Modules\AdminAccess\Application\Services\PasswordPolicyService;
+use Modules\AdminAccess\Infrastructure\Security\{
+    BcryptPasswordHasher,
+    SpatieRoleManager,
+    HaveIBeenPwnedChecker
+};
 class AdminAccessServiceProvider extends ServiceProvider
 {
- 
+
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config.php', 'admin-access');
-        $this->app->bind(
-            InstallationInterface::class,
-            static fn ($app) => new InstallationRepository($app->make(CacheRepository::class))
-        ); 
+        $this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
+        $this->app->bind(PasswordHasherInterface::class, BcryptPasswordHasher::class);
+        $this->app->bind(BreachedPasswordCheckerInterface::class, HaveIBeenPwnedChecker::class);
+        $this->app->bind(RoleManagerInterface::class, SpatieRoleManager::class);
+        $this->app->bind(PasswordPolicyInterface::class, PasswordPolicyService::class);
+        $this->app->singleton(InstallationInterface::class, InstallationRepository::class);
+
+        $this->app->when(PasswordPolicyService::class)
+            ->needs('$minLength')
+            ->give(fn() => (int) config('admin_access.password.min_length'));
+
+        $this->app->when(PasswordPolicyService::class)
+            ->needs('$historyLimit')
+            ->give(fn() => (int) config('admin_access.password.history_limit'));
     }
 
     public function boot(): void
     {
-        
+
         $this->loadMigrationsFrom(__DIR__ . '/../Infrastructure/Persistence/Migrations');
-        
+
         $this->loadRoutesFrom(__DIR__ . '/../Routes/api.php');
         $this->loadRoutesFrom(__DIR__ . '/../Routes/web.php');
-        
+
         $this->publishes([
-            __DIR__.'/../config.php' => config_path('config.php')
+            __DIR__ . '/../config.php' => config_path('config.php')
         ], 'admin-access-config');
+
+        $this->registerRateLimiters();
+
+        Gate::before(function ($admin, string $ability) {
+            return method_exists($admin, 'hasRole') && $admin->hasRole(config('admin_access.roles.super_admin'))
+                ? true
+                : null;
+        });
+
+
+        $this->app['router']->aliasMiddleware('role', \Spatie\Permission\Middleware\RoleMiddleware::class);
+        $this->app['router']->aliasMiddleware('permission', \Spatie\Permission\Middleware\PermissionMiddleware::class);
+        $this->app['router']->aliasMiddleware('role_or_permission', \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class);
+
+        Route::pushMiddlewareToGroup('api', EnsureFrontendRequestsAreStateful::class);
     }
 
-
+    private function registerRateLimiters(): void
+    {
+        RateLimiter::for('admin-setup', function ($request) {
+            $config = config('admin_access.rate_limits.setup');
+            return Limit::perMinutes($config['decay_minutes'], $config['max_attempts'])
+                ->by($request->ip());
+        });
+    }
 
     // Register Events/Listeners, Jobs, etc. (if not auto-discovered)
     // $this->app->bind(...);

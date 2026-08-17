@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO;
+namespace App\Application\DTO;
 
 /**
  * Base for every cross-layer DTO in the platform. DTOs are plain,

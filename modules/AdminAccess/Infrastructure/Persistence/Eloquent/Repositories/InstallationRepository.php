@@ -2,50 +2,47 @@
 
 namespace Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Repositories;
 
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Modules\AdminAccess\Domain\Contracts\InstallationInterface;
 use Modules\AdminAccess\Domain\ValueObjects\AdminId;
-use Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Models\InstallationLock;
+use Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Models\{InstallationLock, Admin};
+
 final class InstallationRepository implements InstallationInterface 
 {
 
-    public function __construct (
-        private readonly CacheRepository $cache,
-    ) {}
+    private const CACHE_KEY = 'admin_access.installed';
+    
 
     public function isInstalled() : bool
     {
 
+        return Cache::store("installation")->rememberForever(self::CACHE_KEY, function (){
+            return Admin::role(config('admin_access.roles.super_admin'))->exists();
+        });
     }
 
-    public function isInstalledByDB(bool $lockForUpdate = false) : bool
-    {
+  
 
+    public function claimInstallationForUpdate() : bool
+    {
+        $onLock = InstallationLock::where('id', 1)->lockForUpdate()->first(); // it return a single object
+        return $onLock->installed_at === null;
     }
 
-    public function claimsInstallation(AdminId $claimedBy) : bool
+    public function markInstalled(AdminId $installedBy) : void
     {
+        InstallationLock::where('id', 1)->update([
+            'installed_at' => now(),
+            'installed_by_admin_id' => $installedBy->value()
+        ]);
 
-    }
-
-    public function markInstalled(AdminId $installedBy) : bool
-    {
-
+        Cache::store('installation')->forever(self::CACHE_KEY, true);
     }
 
     public function forgetCache() : void
     {
-
+        Cache::store('installation')->forget(self::CACHE_KEY);
     }
 
-    private function writeInstalledRow(Admin_id $installedBy) : void
-    {
-
-    }
-
-    private function warmCache() : void
-    {
-        
-    }
+   
 }

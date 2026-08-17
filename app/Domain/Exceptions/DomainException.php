@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Domain\Exceptions;
 
 
 /**
@@ -10,4 +10,10 @@ namespace App\Exceptions;
  */
 abstract class DomainException extends \DomainException
 {
+    abstract public function errorCode(): string;
+
+    public function httpStatus(): int
+    {
+        return 422;
+    }
 }
