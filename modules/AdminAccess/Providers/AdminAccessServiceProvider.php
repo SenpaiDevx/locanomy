@@ -7,13 +7,15 @@ use Illuminate\Support\Facades\{Route, Gate, RateLimiter};
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Modules\AdminAccess\Domain\Contracts\{
     InstallationInterface,
     AdminRepositoryInterface,
     PasswordHasherInterface,
     RoleManagerInterface,
     PasswordPolicyInterface,
-    BreachedPasswordCheckerInterface
+    BreachedPasswordCheckerInterface,
+    SessionManagerInterface
 };
 use Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Repositories\{
     InstallationRepository,
@@ -23,19 +25,23 @@ use Modules\AdminAccess\Application\Services\PasswordPolicyService;
 use Modules\AdminAccess\Infrastructure\Security\{
     BcryptPasswordHasher,
     SpatieRoleManager,
-    HaveIBeenPwnedChecker
+    HaveIBeenPwnedChecker,
+    GuardSessionManager
 };
+
+use Modules\AdminAccess\Application\Actions\SetupWizardAction;
 class AdminAccessServiceProvider extends ServiceProvider
 {
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'admin-access');
+        $this->mergeConfigFrom(__DIR__ . '/../config.php', 'admin_access'); // config has failed to load due to  configkey is invalid format "admin-access" to "admin_access"
         $this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
         $this->app->bind(PasswordHasherInterface::class, BcryptPasswordHasher::class);
         $this->app->bind(BreachedPasswordCheckerInterface::class, HaveIBeenPwnedChecker::class);
         $this->app->bind(RoleManagerInterface::class, SpatieRoleManager::class);
         $this->app->bind(PasswordPolicyInterface::class, PasswordPolicyService::class);
+        $this->app->bind(SessionManagerInterface::class, GuardSessionManager::class);
         $this->app->singleton(InstallationInterface::class, InstallationRepository::class);
 
         $this->app->when(PasswordPolicyService::class)
@@ -45,6 +51,10 @@ class AdminAccessServiceProvider extends ServiceProvider
         $this->app->when(PasswordPolicyService::class)
             ->needs('$historyLimit')
             ->give(fn() => (int) config('admin_access.password.history_limit'));
+
+        $this->app->when(SetupWizardAction::class)
+            ->needs('$superAdminRole')
+            ->give(fn() => (string) config('admin_access.roles.super_admin'));
     }
 
     public function boot(): void
@@ -57,7 +67,7 @@ class AdminAccessServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config.php' => config_path('config.php')
-        ], 'admin-access-config');
+        ], 'admin_access_config');
 
         $this->registerRateLimiters();
 
@@ -77,8 +87,14 @@ class AdminAccessServiceProvider extends ServiceProvider
 
     private function registerRateLimiters(): void
     {
+        
         RateLimiter::for('admin-setup', function ($request) {
+            $output = new ConsoleOutput();
             $config = config('admin_access.rate_limits.setup');
+            // $output->writeln(print_r([
+            //     'config' => $config['test'],
+            //     'message' => 'test'
+            // ], true));
             return Limit::perMinutes($config['decay_minutes'], $config['max_attempts'])
                 ->by($request->ip());
         });

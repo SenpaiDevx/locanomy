@@ -66,7 +66,7 @@ return [
         ],
         'setup' => [
             'max_attempts' => env('ADMIN_SETUP_RATE_LIMIT', 5),
-            'decay_minutes' => 1,
+            'decay_minutes' => 2,
         ],
     ],
 ];

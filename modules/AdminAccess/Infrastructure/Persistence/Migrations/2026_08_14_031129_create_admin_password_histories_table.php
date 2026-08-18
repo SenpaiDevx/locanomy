@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('admin_password_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('admin_id')->constrained('admin')->cascadeOnDelete();
+            $table->foreignUuid('admin_id')->constrained('admins')->cascadeOnDelete();
             $table->string('password_hash');
             $table->timestamp('created_at')->useCurrent();
 

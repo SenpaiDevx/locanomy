@@ -2,7 +2,7 @@
 
 namespace Modules\AdminAccess\Application\DTOs;
 
-use App\DTO\BaseDTO;
+use App\Application\DTO\BaseDTO;
 use Modules\AdminAccess\Domain\ValueObjects\Email;
 final class SetupAdminDTO extends BaseDTO {
     public function __construct(

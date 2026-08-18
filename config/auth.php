@@ -1,7 +1,7 @@
 <?php
 
 use Modules\AdminAccess\Infrastructure\Persistence\Eloquent\Models\Admin;
-
+use App\Models\User;
 return [
 
     /*
@@ -17,7 +17,7 @@ return [
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'web'),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'admins'),
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
     /*
@@ -38,18 +38,25 @@ return [
     */
 
     'guards' => [
-        'web' => [
+       'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'api' => [
+
+         'api' => [
             'driver' => 'sanctum',
             'provider' => 'users',
         ],
+
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
-        ]
+        ],
+
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => null,
+        ],
     ],
 
     /*
@@ -70,12 +77,12 @@ return [
     */
 
     'providers' => [
-        // 'users' => [
-        //     'driver' => 'eloquent',
-        //     'model' => env('AUTH_MODEL', Admin::class),
-        // ],
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', User::class),
+        ],
 
-       'admins' => [
+       'admin' => [
             'driver' => 'eloquent',
             'model' => Admin::class,
         ],

@@ -14,7 +14,7 @@ return new class extends Migration {
         Schema::create('admin_installation_lock', function (Blueprint $table) {
             $table->id();
             $table->timestamp('installed_at')->nullable();
-            $table->foreignUuid('installed_by_admin_id')->nullable()->constrained('admin')->nullOnDelete();
+            $table->foreignUuid('installed_by_admin_id')->nullable()->constrained('admins')->nullOnDelete();
             $table->timestamps();
         });
 

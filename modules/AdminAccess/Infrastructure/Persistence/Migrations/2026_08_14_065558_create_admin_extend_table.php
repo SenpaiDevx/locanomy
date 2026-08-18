@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('admin', function (Blueprint $table) {
+        Schema::table('admins', function (Blueprint $table) {
             $table->softDeletes();
             $table->uuid('created_by_admin_id')->nullable()->after('email_verified_at');
         });
@@ -21,7 +21,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-       Schema::table('admin', function (Blueprint $table): void {
+       Schema::table('admins', function (Blueprint $table): void {
             $table->dropSoftDeletes();
             $table->dropColumn('created_by_admin_id');
         });

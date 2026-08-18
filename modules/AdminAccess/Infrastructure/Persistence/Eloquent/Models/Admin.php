@@ -26,12 +26,12 @@ final class Admin extends Model implements AuthenticatableContract
     /** @use HasFactory<AdminFactory> */
     use Authenticatable, HasFactory, HasUuids, HasApiTokens, HasRoles, Notifiable, SoftDeletes;
 
-    public $incrementing = false;
-    protected $table = 'admin';
-    protected $primaryKey = 'id';
+    protected $table = 'admins';
+    // protected $primaryKey = 'id';
     protected $keyType = 'string';
-    protected $guarded = ['id'];
-    protected $guard_name = 'web';
+    // protected $guarded = ['id'];
+    protected string $guard_name = 'admin'; //protected $guard_name = 'web';
+    public $incrementing = false;
     protected $fillable = [
         'id',
         'name',

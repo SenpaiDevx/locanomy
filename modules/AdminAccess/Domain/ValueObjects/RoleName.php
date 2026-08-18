@@ -6,11 +6,16 @@ use App\ValueObjects\ValueObject;
 
 final class RoleName implements ValueObject
 {
-    public function __construct(private readonly string $value)
+    private function __construct(private readonly string $value)
     {
         if (trim($value) === '') {
-            throw new \InvalidArgumentException('A role name cannot be empty.');
+            throw new \InvalidArgumentException('RoleName cannot be empty.');
         }
+    }
+
+    public static function fromString(string $value): self
+    {
+        return new self($value);
     }
 
     public function value(): string
@@ -18,9 +23,9 @@ final class RoleName implements ValueObject
         return $this->value;
     }
 
-    public function equals(ValueObject $other): bool
+    public function equals(self $other): bool
     {
-        return $other instanceof self && $other->value === $this->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

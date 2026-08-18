@@ -2,7 +2,7 @@
 
 namespace Modules\AdminAccess\Domain\Exceptions;
 
-use App\Exceptions\DomainException;
+use App\Domain\Exceptions\DomainException;
 final class AccountLockedException extends DomainException
 {
     public function __construct(private readonly ?\DateTimeImmutable $lockedUntilAt)

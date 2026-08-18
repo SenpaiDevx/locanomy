@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
- 
+use Symfony\Component\Console\Output\ConsoleOutput;
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -35,11 +35,16 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $output = new ConsoleOutput();
+        // $output->writeln(print_r([
+        //         'request' => $request->user(),
+        //         'message' => 'test'
+        //     ], true));
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->admin(),
+                'user' => $request->user(),
             ],
         ];
     }

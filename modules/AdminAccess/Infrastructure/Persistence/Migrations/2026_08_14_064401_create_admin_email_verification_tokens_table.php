@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('admin_email_verification_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('admin_id')->constrained('admin')->cascadeOnDelete();
+            $table->foreignUuid('admin_id')->constrained('admins')->cascadeOnDelete();
             $table->string('token_hash');
             $table->timestamp('expires_at');
             $table->timestamp('consumed_at')->nullable();
