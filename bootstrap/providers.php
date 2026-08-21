@@ -1,7 +1,7 @@
 <?php
 
 use App\Providers\{AppServiceProvider, SharedServiceProvider};
-use Modules\Product\Providers\ProductServiceProvider;
+use Modules\Products\Providers\ProductServiceProvider;
 use Modules\AdminAccess\Providers\{
     AdminAccessServiceProvider,
     AdminAccessEventServiceProvider

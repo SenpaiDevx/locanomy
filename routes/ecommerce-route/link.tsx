@@ -1,4 +1,4 @@
-import type { NavItem } from '../../resources/js/types/navigations'
+import type { NavItem } from '../../resources/js/Common/Types/navigations'
 import ViewComfyTwoToneIcon from '@mui/icons-material/ViewComfyTwoTone';
 import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import ImportContactsRoundedIcon from '@mui/icons-material/ImportContactsRounded';

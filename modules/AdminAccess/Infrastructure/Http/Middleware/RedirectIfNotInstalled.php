@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Modules\AdminAccess\Domain\Contracts\InstallationInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Applied to every admin route (both Routes/web.php and Routes/api.php —
@@ -28,7 +29,7 @@ final class RedirectIfNotInstalled
     {
         $isSetupRoute = str_ends_with((string) $request->route()?->getName(), '.setup.show')
             || str_ends_with((string) $request->route()?->getName(), '.setup.store');
-
+        
         $installed = $this->installation->isInstalled();
 
         if (!$installed && !$isSetupRoute) {

@@ -1,11 +1,10 @@
 import { createInertiaApp, type ResolvedComponent } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { initializeTheme } from '@/hooks/use-appearance';
+import { initializeTheme } from '@/Common/Hooks/use-appearance';
 import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client';
 import { StrictMode } from 'react';
-import { AppMain } from './layouts/app/app-main-layout';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 export const queryClient = new QueryClient({
     defaultOptions: {
@@ -22,8 +21,8 @@ createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     resolve: (name) =>
         resolvePageComponent(
-            `./pages/${name}.tsx`,
-            import.meta.glob<ResolvedComponent>('./pages/**/*.tsx')
+            `./Pages/${name}.tsx`,
+            import.meta.glob<ResolvedComponent>('./Pages/**/*.tsx')
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);

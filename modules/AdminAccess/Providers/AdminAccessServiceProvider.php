@@ -89,12 +89,8 @@ class AdminAccessServiceProvider extends ServiceProvider
     {
         
         RateLimiter::for('admin-setup', function ($request) {
-            $output = new ConsoleOutput();
             $config = config('admin_access.rate_limits.setup');
-            // $output->writeln(print_r([
-            //     'config' => $config['test'],
-            //     'message' => 'test'
-            // ], true));
+            
             return Limit::perMinutes($config['decay_minutes'], $config['max_attempts'])
                 ->by($request->ip());
         });

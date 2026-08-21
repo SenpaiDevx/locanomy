@@ -1,4 +1,4 @@
-import { AppMain } from "@/layouts/app/app-main-layout";
+import { AppMain } from "@/Common/Layouts/app/app-main-layout";
 export default function AdminEccomerce () {
     return (
         <AppMain>

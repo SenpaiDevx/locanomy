@@ -1,0 +1,58 @@
+import { Link, router } from '@inertiajs/react';
+import LogOut from '@mui/icons-material/Logout'
+import Settings from '@mui/icons-material/Settings'
+import {
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+} from '@/Common/Components/ui/dropdown-menu';
+import { UserInfo } from '@/Common/Components/user-info';
+import { useMobileNavigation } from '@/Common/Hooks/use-mobile-navigation';
+import type { User } from '@/Common/Types';
+
+export function UserMenuContent({ user }: { user: User }) {
+    const cleanup = useMobileNavigation();
+
+    const handleLogout = () => {
+        cleanup();
+        router.flushAll();
+    };
+    
+
+    return (
+        <>
+            <DropdownMenuLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <UserInfo user={user} showEmail={true} />
+                </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                    <Link
+                        className="block w-full cursor-pointer"
+                        href={'/'}
+                        onClick={cleanup}
+                    >
+                        <Settings className="mr-2" />
+                        Settings
+                    </Link>
+                </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+                <Link
+                    className="block w-full cursor-pointer"
+                    href={'#'}
+                    as="button"
+                    onClick={handleLogout}
+                    data-test="logout-button"
+                >
+                    <LogOut className="mr-2" />
+                    Log out
+                </Link>
+            </DropdownMenuItem>
+        </>
+    );
+}
