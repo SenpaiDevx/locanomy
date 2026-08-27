@@ -23,7 +23,7 @@ final class SetupWizardController extends Controller
     }
     public function index(): Response
     {
-        return Inertia::render('welcome');
+        return Inertia::render('admin/admin.page');
     }
 
     public function store(RegisterAdminRequest $request): RedirectResponse
