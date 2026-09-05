@@ -34,6 +34,7 @@ final class SetupWizardController extends Controller
                 'email' => $request->string('email')->toString(),
                 'password' => $request->string('password')->toString(),
             ]));
+            
         } catch (SystemAlreadyInstalledException) {
              return redirect()->to(config('admin_access.setup.redirect_route'))
                 ->withErrors(['setup' => 'This system has already been set up. Please sign in.']);

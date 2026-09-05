@@ -4,10 +4,12 @@ namespace Modules\AdminAccess\Application\DTOs;
 
 use App\Application\DTO\BaseDTO;
 use Modules\AdminAccess\Domain\ValueObjects\Email;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+#[TypeScript(location: ['admin', 'types'])]
 final class SetupAdminDTO extends BaseDTO {
     public function __construct(
         private readonly string $name,
-        public readonly Email $email,
+        public readonly string $email,
         public readonly string $password,
     ){}
 

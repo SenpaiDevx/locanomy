@@ -3,7 +3,10 @@
 namespace Modules\AdminAccess\Application\DTOs;
 
 use App\Application\DTO\BaseDTO;
+use Modules\AdminAccess\Application\DTOs\AdminDTO;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript(location: ['admin', 'types'])]
 final class AdminListDTO extends BaseDTO
 {
     /** @param AdminDTO[] $items */

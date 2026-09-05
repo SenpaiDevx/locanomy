@@ -30,12 +30,16 @@ use Modules\AdminAccess\Infrastructure\Security\{
 };
 
 use Modules\AdminAccess\Application\Actions\SetupWizardAction;
+use App\Support\ModuleTypeScriptRegistry;
 class AdminAccessServiceProvider extends ServiceProvider
 {
 
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config.php', 'admin_access'); // config has failed to load due to  configkey is invalid format "admin-access" to "admin_access"
+        ModuleTypeScriptRegistry::add(
+            dirname(__DIR__). '/Application/DTOs'
+        );
         $this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
         $this->app->bind(PasswordHasherInterface::class, BcryptPasswordHasher::class);
         $this->app->bind(BreachedPasswordCheckerInterface::class, HaveIBeenPwnedChecker::class);

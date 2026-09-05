@@ -8,6 +8,6 @@ namespace App\ValueObjects;
  */
 interface ValueObject
 {
-    public function equals(self $other): bool;
+    public function equals(ValueObject $other): bool;
 }
 

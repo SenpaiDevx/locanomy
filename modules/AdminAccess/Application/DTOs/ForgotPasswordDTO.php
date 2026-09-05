@@ -3,7 +3,8 @@
 namespace Modules\AdminAccess\Application\DTOs;
 
 use App\Application\DTO\BaseDTO;
-
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+#[TypeScript(location: ['admin', 'types'])]
 final class ForgotPasswordDTO extends BaseDTO
 {
     public function __construct(public readonly string $email)

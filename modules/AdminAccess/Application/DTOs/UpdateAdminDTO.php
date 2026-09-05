@@ -4,6 +4,8 @@ namespace Modules\AdminAccess\Application\DTOs;
 
 use App\Application\DTO\BaseDTO;
 
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+#[TypeScript(location: ['admin', 'types'])]
 final class UpdateAdminDTO extends BaseDTO
 {
     public function __construct(

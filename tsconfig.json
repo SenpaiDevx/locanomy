@@ -110,7 +110,8 @@
         "ignoreDeprecations": "6.0",
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./resources/js/*"]
+            "@/*": ["./resources/js/*"],
+            "@Modules/*": ["resources/js/Modules/*"]
         },
         "jsx": "react-jsx"
     },

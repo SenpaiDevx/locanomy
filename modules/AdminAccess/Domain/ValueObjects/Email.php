@@ -2,6 +2,9 @@
 
 namespace Modules\AdminAccess\Domain\ValueObjects;
 use App\ValueObjects\ValueObject;
+/**
+ * @property string $value
+ */
 final class Email implements ValueObject
 {
     private readonly string $value;
@@ -22,9 +25,9 @@ final class Email implements ValueObject
         return $this->value;
     }
 
-    public function equals(self $other): bool
+    public function equals(ValueObject $other): bool
     {
-        return $this->value === $other->value;
+        return $other instanceof self && $this->value === $other->value;
     }
 
     public function __toString(): string
